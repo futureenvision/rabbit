@@ -6,7 +6,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-type onQueue func(body []byte)
+type onQueue func(outData []byte)
 type RabbitServer struct {
 	conn *amqp.Connection
 	ch   *amqp.Channel

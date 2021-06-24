@@ -39,7 +39,7 @@ func (rabbit *RabbitClient) InitQueue(queueName string) amqp.Queue {
 	return queue
 }
 
-func (rabbit *RabbitClient) Send(queue amqp.Queue, body string) {
+func (rabbit *RabbitClient) Send(queue amqp.Queue, inData []byte) {
 	err := rabbit.channel.Publish(
 		"",         // exchange
 		queue.Name, // routing key
@@ -47,10 +47,10 @@ func (rabbit *RabbitClient) Send(queue amqp.Queue, body string) {
 		false,      // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(body),
+			Body:        inData,
 		})
 	failOnError(err, "Failed to publish a message")
-	log.Printf("[%s][Sent] -> %s\n", queue.Name, body)
+	log.Printf("[%s][Sent] -> %s\n", queue.Name, string(inData))
 }
 
 func (rabbit *RabbitClient) Close() {
